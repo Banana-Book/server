@@ -1,25 +1,26 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require('cors');
-const mongoose = require("./config/mongoose");
-
-
+const express = require("express");
+const cors = require("cors");
 const apiRouter = require("./routes/api/index.router");
 
-var app = express();
+require('dotenv').config();
+const mongoose = require('./config/mongoose');
 
+const app = express();
+const port = process.env.PORT;
+
+//Conexion a mongoDB
 mongoose.connect();
 
-app.use(cors());
-app.use(logger('dev'));
+//Middlewares
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/api', apiRouter);
 
-app.use("/api", apiRouter);
+//Listener
 
-module.exports = app;
+app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+})
