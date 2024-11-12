@@ -69,12 +69,30 @@ controller.update = async (req, res) => {
   try {
     const { identifier } = req.params;
     const { title, price, description, category, condition, image } = req.body;
+    const updateFields = {};
+    if (title) updateFields.title = title;
+    if (price) updateFields.price = price;
+    if (description) updateFields.description = description;
+    if (category) updateFields.category = category;
+    if (condition) updateFields.condition = condition;
+    if (image) updateFields.image = image;
 
-    const updatedPost = await Post.findByIdAndUpdate(
-      identifier,
-      { title, price, description, category, condition, image },
-      { new: true }
-    );
+    const { _id: userID } = req.user;
+    const post = await Post.findById(identifier);
+
+    if (!post) {
+      return res.status(404).json({ error: "Post no encontrado" });
+    }
+
+    if (post.user.toString() !== userID.toString()) {
+      return res
+        .status(403)
+        .json({ error: "No tienes permiso para actualizar este post" });
+    }
+
+    const updatedPost = await Post.findByIdAndUpdate(identifier, updateFields, {
+      new: true,
+    });
 
     if (!updatedPost) {
       return res.status(404).json({ error: "Post no encontrado" });
