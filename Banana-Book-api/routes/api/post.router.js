@@ -39,4 +39,13 @@ router.patch(
   postController.update
 );
 
+router.delete(
+  "/:identifier",
+  authentication,
+  authorization(ROLES.USER),
+  postValidators.updatePostValidator,
+  runValidations,
+  postController.delete
+);
+
 module.exports = router;

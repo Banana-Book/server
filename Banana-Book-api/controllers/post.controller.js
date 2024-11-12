@@ -65,6 +65,34 @@ controller.findOneByID = async (req, res) => {
   }
 };
 
+controller.delete = async (req, res) => {
+  try {
+    const { identifier } = req.params;
+    const { _id: userID } = req.user;
+
+    const post = await Post.findById(identifier);
+
+    if (!post) {
+      return res.status(404).json({ error: "Post no encontrado" });
+    }
+
+    if (post.user.toString() !== userID.toString()) {
+      return res
+        .status(403)
+        .json({ error: "No tienes permiso para actualizar este post" });
+    }
+
+    const deletedPost = await Post.findByIdAndDelete(identifier);
+    if (!deletedPost) {
+      return res.status(404).json({ error: "Post no encontrado" });
+    }
+    res.status(200).json(deletedPost);
+  } catch (error) {
+    debug({ error });
+    res.status(500).json({ error: "Error interno de servidor" });
+  }
+};
+
 controller.update = async (req, res) => {
   try {
     const { identifier } = req.params;
