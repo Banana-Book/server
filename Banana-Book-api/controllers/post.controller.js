@@ -65,4 +65,26 @@ controller.findOneByID = async (req, res) => {
   }
 };
 
+controller.update = async (req, res) => {
+  try {
+    const { identifier } = req.params;
+    const { title, price, description, category, condition, image } = req.body;
+
+    const updatedPost = await Post.findByIdAndUpdate(
+      identifier,
+      { title, price, description, category, condition, image },
+      { new: true }
+    );
+
+    if (!updatedPost) {
+      return res.status(404).json({ error: "Post no encontrado" });
+    }
+
+    res.status(200).json(updatedPost);
+  } catch (error) {
+    debug({ error });
+    res.status(500).json({ error: "Error interno de servidor" });
+  }
+};
+
 module.exports = controller;
