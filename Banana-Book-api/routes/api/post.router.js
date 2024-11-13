@@ -23,4 +23,10 @@ router.post("/",
     runValidations,  
     postController.create);
 
+router.get("/search/:title",
+    postValidators.filterPostByTitleValidator,
+    runValidations,
+    postController.filterByTitle
+    
+)
 module.exports = router;

@@ -26,4 +26,9 @@ validators.findPostByIdValidator = [
         .isMongoId().withMessage("El id debe de ser un id de Mongo válido")
 ];
 
+validators.filterPostByTitleValidator = [
+    param("title")
+        .notEmpty().withMessage("El título no debe de ir vacío")
+        .isString().withMessage("El título debe de ser una cadena de texto")
+];
 module.exports = validators;
