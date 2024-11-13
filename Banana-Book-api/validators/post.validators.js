@@ -31,4 +31,8 @@ validators.filterPostByTitleValidator = [
         .notEmpty().withMessage("El título no debe de ir vacío")
         .isString().withMessage("El título debe de ser una cadena de texto")
 ];
+
+validators.filterPostByCategoryValidator = [
+    param("category").notEmpty().withMessage("La categoría no debe de ir vacía").isString().withMessage("La categoría debe de ser una cadena de texto")
+];
 module.exports = validators;

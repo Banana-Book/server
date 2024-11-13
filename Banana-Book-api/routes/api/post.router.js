@@ -29,4 +29,11 @@ router.get("/search/:title",
     postController.filterByTitle
     
 )
+
+router.get("/filter/:category",
+    postValidators.filterPostByCategoryValidator,
+    runValidations,
+    postController.filterByCategory
+    
+)
 module.exports = router;

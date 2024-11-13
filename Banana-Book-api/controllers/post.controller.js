@@ -66,22 +66,41 @@ controller.findOneByID = async (req, res) => {
 };
 
 controller.filterByTitle = async (req, res) => {
-  try{
+  try {
     const { title } = req.params;
 
-    const posts = await Post.find({ title: RegExp(title, "i")}).populate(
+    const posts = await Post.find({ title: RegExp(title, "i") }).populate(
       "user",
       "name lastName"
     );
 
-    if(posts.length === 0){
+    if (posts.length === 0) {
       return res.status(404).json({ error: "No se encontraron posts" });
     }
-    
+
     res.status(200).json(posts);
   } catch (error) {
     debug({ error });
     res.status(500).json({ error: "Error interno de servidor" });
   }
-}
+};
+
+controller.filterByCategory = async (req, res) => {
+  try {
+    const { category } = req.params;
+    const posts = await Post.find({ category: RegExp(category, "i") }).populate(
+      "user",
+      "name lastName"
+    );
+    if (posts.length === 0) {
+      return res.status(404).json({ error: "No se encontraron posts" });
+    }
+
+    res.status(200).json(posts);
+  } catch (error) {
+    debug({ error });
+    res.status(500).json({ error: "Error interno de servidor" });
+  }
+};
+
 module.exports = controller;
