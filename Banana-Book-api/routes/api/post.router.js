@@ -67,4 +67,12 @@ router.delete(
   postController.delete
 );
 
+router.get("/getByUser/:identifier",
+  authentication,
+  authorization(ROLES.USER),
+  postValidators.updatePostValidator,
+  runValidations,
+  postController.findByUser
+);
+
 module.exports = router;
