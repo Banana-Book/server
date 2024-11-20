@@ -93,7 +93,7 @@ controller.filterByTitle = async (req, res) => {
       return res.status(404).json({ error: "No se encontraron posts" });
     }
 
-    res.status(200).json(posts);
+    res.status(200).json({posts});
     } catch (error) {
     debug({ error });
     res.status(500).json({ error: "Error interno de servidor" });

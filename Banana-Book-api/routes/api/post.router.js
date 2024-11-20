@@ -13,7 +13,7 @@ const {
   authorization,
 } = require("../../middlewares/auth.middlewares");
 
-router.get("/", postController.findAll);
+router.get("/search", postController.findAll);
 
 router.post(
   "/send-email",
