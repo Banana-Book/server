@@ -189,8 +189,8 @@ controller.update = async (req, res) => {
 
 controller.findByUser = async (req, res) => {
   try {
-    const { _id: userID } = req.user;
-    const posts = await Post.find({ user: userID }).populate(
+    const { identifier } = req.params;
+    const posts = await Post.find({ user: identifier }).populate(
       "user",
       "name lastName"
     );
