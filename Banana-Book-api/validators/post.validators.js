@@ -31,6 +31,7 @@ validators.findPostByIdValidator = [
     .withMessage("El id debe de ser un id de Mongo válido"),
 ];
 
+
 validators.sendEmailValidator = [
   body("to")
     .notEmpty()
@@ -41,6 +42,20 @@ validators.sendEmailValidator = [
     .notEmpty()
     .withMessage("El campo 'subject' no debe de ser vacío"),
   body("text").notEmpty().withMessage("El campo 'text' no debe de ser vacío"),
+];
+
+validators.filterPostByTitleValidator = [
+    param("title")
+        .notEmpty().withMessage("El título no debe de ir vacío")
+        .isString().withMessage("El título debe de ser una cadena de texto")
+];
+
+validators.filterPostByCategoryValidator = [
+    param("category").notEmpty().withMessage("La categoría no debe de ir vacía").isString().withMessage("La categoría debe de ser una cadena de texto")
+];
+
+validators.updatePostValidator = [
+  param("identifier").notEmpty().withMessage("El id no debe de ir vacío"),
 ];
 
 module.exports = validators;
