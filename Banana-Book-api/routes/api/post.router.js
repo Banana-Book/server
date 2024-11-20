@@ -15,6 +15,14 @@ const {
 
 router.get("/", postController.findAll);
 
+router.post(
+  "/send-email",
+  authentication,
+  authorization(ROLES.USER),
+  postValidators.sendEmailValidator,
+  runValidations,
+  postController.sendEmail);
+
 router.get("/:identifier",
     postValidators.findPostByIdValidator,
     runValidations,
