@@ -83,7 +83,7 @@ controller.findOneByID = async (req, res) => {
 
     const post = await Post.findById(identifier).populate(
       "user",
-      "name lastName"
+      "name lastName email"
     );
 
     if (!post) {
@@ -197,6 +197,25 @@ controller.update = async (req, res) => {
     }
 
     res.status(200).json(updatedPost);
+  } catch (error) {
+    debug({ error });
+    res.status(500).json({ error: "Error interno de servidor" });
+  }
+};
+
+controller.findByUser = async (req, res) => {
+  try {
+    const { identifier } = req.params;
+    const posts = await Post.find({ user: identifier }).populate(
+      "user",
+      "name lastName"
+    );
+
+    if (posts.length === 0) {
+      return res.status(404).json({ error: "No se encontraron posts" });
+    }
+
+    res.status(200).json(posts);
   } catch (error) {
     debug({ error });
     res.status(500).json({ error: "Error interno de servidor" });

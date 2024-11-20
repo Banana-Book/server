@@ -82,4 +82,12 @@ router.patch(
   postController.hidden
 );
 
+router.get("/getByUser/:identifier",
+  authentication,
+  authorization(ROLES.USER),
+  postValidators.updatePostValidator,
+  runValidations,
+  postController.findByUser
+);
+
 module.exports = router;
