@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 //variables de entorno
 const secret = process.env.TOKEN_SECRET || "SuperSecretKey";
-const expiration = process.env.TOKEN_EXP || "15min";
+const expiration = process.env.TOKEN_EXP || "15d";
 
 const tools = {};
 
