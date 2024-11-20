@@ -31,6 +31,16 @@ validators.findPostByIdValidator = [
     .withMessage("El id debe de ser un id de Mongo válido"),
 ];
 
+validators.filterPostByTitleValidator = [
+    param("title")
+        .notEmpty().withMessage("El título no debe de ir vacío")
+        .isString().withMessage("El título debe de ser una cadena de texto")
+];
+
+validators.filterPostByCategoryValidator = [
+    param("category").notEmpty().withMessage("La categoría no debe de ir vacía").isString().withMessage("La categoría debe de ser una cadena de texto")
+];
+
 validators.updatePostValidator = [
   param("identifier").notEmpty().withMessage("El id no debe de ir vacío"),
 ];

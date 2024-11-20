@@ -14,21 +14,32 @@ const {
 } = require("../../middlewares/auth.middlewares");
 
 router.get("/", postController.findAll);
-router.get(
-  "/:identifier",
-  postValidators.findPostByIdValidator,
-  runValidations,
-  postController.findOneByID
-);
 
-router.post(
-  "/",
-  authentication,
-  authorization(ROLES.USER),
-  postValidators.createPostValidator,
-  runValidations,
-  postController.create
-);
+router.get("/:identifier",
+    postValidators.findPostByIdValidator,
+    runValidations,
+    postController.findOneByID);
+
+router.post("/", 
+    authentication,
+    authorization(ROLES.USER),
+    postValidators.createPostValidator, 
+    runValidations,  
+    postController.create);
+
+router.get("/search/:title",
+    postValidators.filterPostByTitleValidator,
+    runValidations,
+    postController.filterByTitle
+    
+)
+
+router.get("/filter/:category",
+    postValidators.filterPostByCategoryValidator,
+    runValidations,
+    postController.filterByCategory
+    
+)
 
 router.patch(
   "/:identifier",
