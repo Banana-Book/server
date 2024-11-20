@@ -21,33 +21,38 @@ router.post(
   authorization(ROLES.USER),
   postValidators.sendEmailValidator,
   runValidations,
-  postController.sendEmail);
+  postController.sendEmail
+);
 
-router.get("/:identifier",
-    postValidators.findPostByIdValidator,
-    runValidations,
-    postController.findOneByID);
+router.get(
+  "/:identifier",
+  postValidators.findPostByIdValidator,
+  runValidations,
+  postController.findOneByID
+);
 
-router.post("/", 
-    authentication,
-    authorization(ROLES.USER),
-    postValidators.createPostValidator, 
-    runValidations,  
-    postController.create);
+router.post(
+  "/",
+  authentication,
+  authorization(ROLES.USER),
+  postValidators.createPostValidator,
+  runValidations,
+  postController.create
+);
 
-router.get("/search/:title",
-    postValidators.filterPostByTitleValidator,
-    runValidations,
-    postController.filterByTitle
-    
-)
+router.get(
+  "/search/:title",
+  postValidators.filterPostByTitleValidator,
+  runValidations,
+  postController.filterByTitle
+);
 
-router.get("/filter/:category",
-    postValidators.filterPostByCategoryValidator,
-    runValidations,
-    postController.filterByCategory
-    
-)
+router.get(
+  "/filter/:category",
+  postValidators.filterPostByCategoryValidator,
+  runValidations,
+  postController.filterByCategory
+);
 
 router.patch(
   "/:identifier",
@@ -65,6 +70,16 @@ router.delete(
   postValidators.updatePostValidator,
   runValidations,
   postController.delete
+);
+
+// put hidden post
+router.patch(
+  "/:identifier/hidden",
+  authentication,
+  authorization(ROLES.USER),
+  postValidators.hidePostValidator,
+  runValidations,
+  postController.hidden
 );
 
 module.exports = router;
