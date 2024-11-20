@@ -66,7 +66,7 @@ controller.findOneByID = async (req, res) => {
 
     const post = await Post.findById(identifier).populate(
       "user",
-      "name lastName"
+      "name lastName email"
     );
 
     if (!post) {
@@ -94,7 +94,7 @@ controller.filterByTitle = async (req, res) => {
     }
 
     res.status(200).json(posts);
-    } catch (error) {
+  } catch (error) {
     debug({ error });
     res.status(500).json({ error: "Error interno de servidor" });
   }
@@ -122,7 +122,6 @@ controller.delete = async (req, res) => {
       return res.status(404).json({ error: "Post no encontrado" });
     }
     res.status(200).json(deletedPost);
-
   } catch (error) {
     debug({ error });
     res.status(500).json({ error: "Error interno de servidor" });
@@ -141,7 +140,7 @@ controller.filterByCategory = async (req, res) => {
     }
 
     res.status(200).json(posts);
-    } catch (error) {
+  } catch (error) {
     debug({ error });
     res.status(500).json({ error: "Error interno de servidor" });
   }
