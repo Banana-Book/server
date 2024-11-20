@@ -1,5 +1,6 @@
 const Post = require("../models/Post.model");
 const debug = require("debug")("app:post-controller");
+const sendEmail = require("../utils/email");
 
 const controller = {};
 
@@ -28,6 +29,20 @@ controller.create = async (req, res) => {
     res.status(201).json(newPost);
   } catch (error) {
     debug(error);
+    res.status(500).json({ error: "Error interno de servidor" });
+  }
+};
+
+controller.sendEmail = async (req, res) => {
+  try {
+    const { to, subject, text } = req.body;
+
+    //Enviar email
+    await sendEmail(to, subject, text);
+
+    res.status(200).json({ message: "Email enviado" });
+  } catch (error) {
+    debug({ error });
     res.status(500).json({ error: "Error interno de servidor" });
   }
 };
