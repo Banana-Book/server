@@ -44,6 +44,7 @@ controller.hidden = async (req, res) => {
     }
     post.hidden = !post.hidden;
     post.save();
+    res.status(200).json(post);
   } catch (error) {
     debug({ error });
     res.status(500).json({ error: "Error interno de servidor" });
