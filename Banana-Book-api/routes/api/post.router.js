@@ -13,8 +13,6 @@ const {
   authorization,
 } = require("../../middlewares/auth.middlewares");
 
-router.get("/", postController.findAll);
-
 router.post(
   "/send-email",
   authentication,
@@ -41,10 +39,8 @@ router.post(
 );
 
 router.get(
-  "/search/:title",
-  postValidators.filterPostByTitleValidator,
-  runValidations,
-  postController.filterByTitle
+  "/",
+  postController.filter
 );
 
 router.get(
