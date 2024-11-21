@@ -105,8 +105,8 @@ controller.filter = async (req, res) => {
     if (category) query.category = { $in: Array.isArray(category) ? category : [category] };
     if (price) query.price = { $lte: Number(price) };
     if (condition) query.condition = { $in: Array.isArray(condition) ? condition : [condition] };
-    
-    const posts = await Post.find(query);
+
+    const posts = await Post.find(query).populate("user","name lastName");
     if (posts.length === 0) {
       return res.status(404).json({ error: "No se encontraron posts" });
     }
