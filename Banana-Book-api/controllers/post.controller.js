@@ -42,8 +42,9 @@ controller.hidden = async (req, res) => {
     if (!post) {
       return res.status(404).json({ error: "Post no encontrado" });
     }
-    post.hidden = !post.hidden;
+    post.hidden = false;
     post.save();
+    res.status(200).json(post);
   } catch (error) {
     debug({ error });
     res.status(500).json({ error: "Error interno de servidor" });
