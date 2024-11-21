@@ -71,6 +71,7 @@ controller.findAll = async (req, res) => {
       "user",
       "name lastName"
     );
+
     return res.status(200).json({ posts });
   } catch (error) {
     debug({ error });
@@ -102,17 +103,22 @@ controller.filter = async (req, res) => {
   try {
     const { title, category, price, condition } = req.query;
     const query = {};
-    if (title) query.title = { $regex: title, $options: 'i' };
-    if (category) query.category = { $in: Array.isArray(category) ? category : [category] };
+    if (title) query.title = { $regex: title, $options: "i" };
+    if (category)
+      query.category = { $in: Array.isArray(category) ? category : [category] };
     if (price) query.price = { $lte: Number(price) };
-    if (condition) query.condition = { $in: Array.isArray(condition) ? condition : [condition] };
+    if (condition)
+      query.condition = {
+        $in: Array.isArray(condition) ? condition : [condition],
+      };
+    query.hidden = false;
 
-    const posts = await Post.find(query).populate("user","name lastName");
+    const posts = await Post.find(query).populate("user", "name lastName");
     if (posts.length === 0) {
       return res.status(404).json({ error: "No se encontraron posts" });
     }
 
-    res.status(200).json({posts});
+    res.status(200).json({ posts });
   } catch (error) {
     debug({ error });
     res.status(500).json({ error: "Error interno de servidor" });
