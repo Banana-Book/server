@@ -33,6 +33,24 @@ controller.create = async (req, res) => {
   }
 };
 
+controller.hidden = async (req, res) => {
+  try {
+    const { identifier } = req.params;
+    const { _id: userID } = req.user;
+
+    const post = await Post.findById(identifier);
+    if (!post) {
+      return res.status(404).json({ error: "Post no encontrado" });
+    }
+    post.hidden = true;
+    post.save();
+    res.status(200).json(post);
+  } catch (error) {
+    debug({ error });
+    res.status(500).json({ error: "Error interno de servidor" });
+  }
+};
+
 controller.sendEmail = async (req, res) => {
   try {
     const { to, subject, text } = req.body;
@@ -53,6 +71,7 @@ controller.findAll = async (req, res) => {
       "user",
       "name lastName"
     );
+
     return res.status(200).json({ posts });
   } catch (error) {
     debug({ error });
@@ -66,7 +85,7 @@ controller.findOneByID = async (req, res) => {
 
     const post = await Post.findById(identifier).populate(
       "user",
-      "name lastName"
+      "name lastName email"
     );
 
     if (!post) {
@@ -80,21 +99,27 @@ controller.findOneByID = async (req, res) => {
   }
 };
 
-controller.filterByTitle = async (req, res) => {
+controller.filter = async (req, res) => {
   try {
-    const { title } = req.params;
+    const { title, category, price, condition } = req.query;
+    const query = {};
+    if (title) query.title = { $regex: title, $options: "i" };
+    if (category)
+      query.category = { $in: Array.isArray(category) ? category : [category] };
+    if (price) query.price = { $lte: Number(price) };
+    if (condition)
+      query.condition = {
+        $in: Array.isArray(condition) ? condition : [condition],
+      };
+    query.hidden = false;
 
-    const posts = await Post.find({ title: RegExp(title, "i") }).populate(
-      "user",
-      "name lastName"
-    );
-
+    const posts = await Post.find(query).populate("user", "name lastName");
     if (posts.length === 0) {
       return res.status(404).json({ error: "No se encontraron posts" });
     }
 
-    res.status(200).json({posts});
-    } catch (error) {
+    res.status(200).json({ posts });
+  } catch (error) {
     debug({ error });
     res.status(500).json({ error: "Error interno de servidor" });
   }
@@ -122,7 +147,6 @@ controller.delete = async (req, res) => {
       return res.status(404).json({ error: "Post no encontrado" });
     }
     res.status(200).json(deletedPost);
-
   } catch (error) {
     debug({ error });
     res.status(500).json({ error: "Error interno de servidor" });
@@ -132,16 +156,16 @@ controller.delete = async (req, res) => {
 controller.filterByCategory = async (req, res) => {
   try {
     const { category } = req.params;
-    const posts = await Post.find({ category: RegExp(category, "i") }).populate(
-      "user",
-      "name lastName"
-    );
+    const posts = await Post.find({
+      category: RegExp(category, "i"),
+      hidden: false,
+    }).populate("user", "name lastName");
     if (posts.length === 0) {
       return res.status(404).json({ error: "No se encontraron posts" });
     }
 
     res.status(200).json(posts);
-    } catch (error) {
+  } catch (error) {
     debug({ error });
     res.status(500).json({ error: "Error interno de servidor" });
   }
@@ -181,6 +205,25 @@ controller.update = async (req, res) => {
     }
 
     res.status(200).json(updatedPost);
+  } catch (error) {
+    debug({ error });
+    res.status(500).json({ error: "Error interno de servidor" });
+  }
+};
+
+controller.findByUser = async (req, res) => {
+  try {
+    const { identifier } = req.params;
+    const posts = await Post.find({ user: identifier }).populate(
+      "user",
+      "name lastName"
+    );
+
+    if (posts.length === 0) {
+      return res.status(404).json({ error: "No se encontraron posts" });
+    }
+
+    res.status(200).json(posts);
   } catch (error) {
     debug({ error });
     res.status(500).json({ error: "Error interno de servidor" });
